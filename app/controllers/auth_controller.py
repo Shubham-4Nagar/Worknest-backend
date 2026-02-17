@@ -4,21 +4,16 @@ from app.services.auth_service import login_user, get_current_user
 
 
 def login():
-
     data = request.get_json()
-
     if not data:
         return jsonify({"error": "Invalid JSON body"}), 400
-
     email = data.get("email")
     password = data.get("password")
 
     if not email or not password:
         return jsonify({"error": "Email and password required"}), 400
-
     try:
         result = login_user(email, password)
-
         return jsonify({
             "message": "Login successful",
             **result
@@ -29,7 +24,6 @@ def login():
 
     except Exception:
         return jsonify({"error": "Internal server error"}), 500
-
 
 @jwt_required()
 def me():

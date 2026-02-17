@@ -24,7 +24,7 @@ def create_space(owner_id, data):
         space_name=data["space_name"],
         location=data["location"],
         max_capacity=max_capacity,
-        is_active=True
+        is_active=False #admin approval first 
     )
 
     try:

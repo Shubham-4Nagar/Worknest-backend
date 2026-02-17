@@ -28,7 +28,7 @@ class Space(db.Model):
     is_active = db.Column(
         db.Boolean,
         nullable=False,
-        default=True
+        default=False
     )
 
     created_at = db.Column(
@@ -54,7 +54,7 @@ class Space(db.Model):
         cascade="all, delete-orphan"
     )
     bookings = db.relationship(
-        "Bookings",
+        "Booking",
         back_populates="space",
         cascade ="all, delete-orphan"
     )

@@ -1,12 +1,13 @@
+import math
+import uuid
+from decimal import Decimal
+from datetime import datetime
 from app.extensions import db
 from app.models.bookings import Booking
 from app.models.spaces import Space
 from app.models.booking_types import BookingType
 from app.models.space_pricing import SpacePricing
-from datetime import datetime
-from decimal import Decimal
-import math
-import uuid
+
 
 #User create booking
 def create_booking_service(user_id, data):
@@ -47,7 +48,7 @@ def create_booking_service(user_id, data):
             return{"error":"end_date must be after start_date"}, 400
         
         # Check space exists & is ACTIVE
-        space = Space.query.filter_by(space_id=space_id,approval_status="active").first()
+        space = Space.query.filter_by(space_id=space_id,is_active=True).first()
 
         if not space:
             return {"error": "Space not available for booking"}, 404
@@ -104,7 +105,6 @@ def create_booking_service(user_id, data):
             total_amount=total_amount,
             status="pending"
         )
-
         db.session.add(booking)
         db.session.commit()
 
@@ -121,7 +121,7 @@ def create_booking_service(user_id, data):
             "error": "Internal server error",
             "details": str(e)
         }, 500
-    
+#OWNER- get all the pending bookings
 def get_owner_pending_bookings_service(owner_id):
     bookings = (
         Booking.query.join(Space, Booking.space_id == Space.space_id).filter(
@@ -144,15 +144,17 @@ def get_owner_pending_bookings_service(owner_id):
         })
 
     return result, 200 #OK
-    
+#Owner- Update the bookings status
 def update_booking_status_service(owner_id, booking_id, status):
-    if status not in ["completed", "cancelled"]:
+    if status not in ["confirmed", "cancelled"]:
         return{
             "error":"Invalid status."
         }, 400
     
-    booking = ( Booking.query.join(Space, Booking.space_id == Space.space_id)
-               .filter(Booking.booking_id == booking_id, Space.owner_id == owner_id).first())
+    booking = ( Booking.query.
+               join(Space, Booking.space_id == Space.space_id)
+               .filter(Booking.booking_id == booking_id, 
+                       Space.owner_id == owner_id).first())
     if not booking:
         return{"error":"Booking not found or you are not the Owner"}, 404
     
@@ -165,7 +167,7 @@ def update_booking_status_service(owner_id, booking_id, status):
         db.session.commit()
 
         return{
-            "message":f"Booking{status} successfully",
+            "message":f"Booking {status} successfully",
             "booking_id": booking.booking_id,
             "status": booking.status
         }, 200
@@ -173,3 +175,58 @@ def update_booking_status_service(owner_id, booking_id, status):
         db.session.rollback()
         return{"message":"Internal Server error",
                "details": str(e)}, 500 
+    
+# USER → Get all bookings
+def get_user_bookings_service(user_id):
+
+    bookings = Booking.query.filter_by(
+        user_id=user_id
+    ).order_by(Booking.created_at.desc()).all()
+
+    result = []
+
+    for booking in bookings:
+        result.append({
+            "booking_id": str(booking.booking_id),
+            "space_id": str(booking.space_id),
+            "status": booking.status,
+            "start_date": booking.start_date,
+            "end_date": booking.end_date,
+            "total_amount": float(booking.total_amount),
+            "created_at": booking.created_at
+        })
+
+    return {"bookings": result}, 200
+
+# USER → Cancel own booking
+def cancel_booking_service(user_id, booking_id):
+
+    booking = Booking.query.filter_by(
+        booking_id=booking_id,
+        user_id=user_id
+    ).first()
+
+    if not booking:
+        return {"error": "Booking not found"}, 404
+
+    if booking.status != "pending":
+        return {"error": "Only pending bookings can be cancelled"}, 400
+
+    booking.status = "cancelled"
+    booking.cancelled_at = datetime.utcnow()
+
+    try:
+        db.session.commit()
+
+        return {
+            "message": "Booking cancelled successfully",
+            "booking_id": str(booking.booking_id),
+            "status": booking.status
+        }, 200
+
+    except Exception as e:
+        db.session.rollback()
+        return {
+            "error": "Internal server error",
+            "details": str(e)
+        }, 500

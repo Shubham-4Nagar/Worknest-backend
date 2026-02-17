@@ -4,7 +4,6 @@ from .owner_verification import OwnerVerification
 from .spaces import Space
 from .amenities import Amenity
 from .space_amenities import SpaceAmenity
-from .space_images import SpaceImage
 from .space_pricing import SpacePricing
 from .booking_types import BookingType
 from .bookings import Booking

@@ -41,12 +41,17 @@ class SpacePricing(db.Model):
         server_default=func.now()
     )
 
+    updated_at = db.Column(
+        db.DateTime,
+        server_default=func.now(),
+        onupdate=func.now()
+    )
+
     # Relationships
     space = db.relationship(
         "Space",
         back_populates="pricing"
     )
-
     __table_args__ = (
         db.UniqueConstraint(
             "space_id",

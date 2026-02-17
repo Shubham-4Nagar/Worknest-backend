@@ -1,8 +1,9 @@
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
-from werkzeug.security import generate_password_hash, check_password_hash
 from app.extensions import db
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 
 class User(db.Model):
@@ -39,7 +40,6 @@ class User(db.Model):
         server_default=func.now(),
         onupdate=func.now()
     )
-
     # Relationships
     role = db.relationship("Role", back_populates="users")
     bookings = db.relationship("Booking", back_populates="user")
@@ -50,7 +50,8 @@ class User(db.Model):
     owner_verification = db.relationship(
         "OwnerVerification",
         back_populates="owner",
-        uselist=False
+        uselist=False,
+        foreign_keys="OwnerVerification.owner_id"
     )
 
     # Password helpers

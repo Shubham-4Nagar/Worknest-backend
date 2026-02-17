@@ -25,8 +25,8 @@ with app.app_context():
                 print(f"Already exists: {name}")
 
         db.session.commit()
-        print("\n✅ Amenities seeded successfully")
+        print("\n Amenities seeded successfully")
 
     except Exception as e:
         db.session.rollback()
-        print("\n❌ Error seeding amenities:", e)
+        print("\n Error seeding amenities:", e)

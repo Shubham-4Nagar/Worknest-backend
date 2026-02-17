@@ -16,7 +16,7 @@ def create_payment_service(user_id, data):
                 return {"error": f"{field} is required"}, 400
 
         booking_id = data["booking_id"]
-        payment_method = data["payment_method"]
+        payment_method = data["payment_method"].strip().upper()
 
         # Validate payment method
         if payment_method not in ALLOWED_METHODS:
@@ -34,15 +34,21 @@ def create_payment_service(user_id, data):
             return {"error": "Booking not found"}, 404
 
         # Payment only allowed for the pending bookings
-        if booking.status != "pending":
+        if booking.status != "confirmed":
             return {
-                "error": "Payment allowed only for pending bookings"
+                "error": "Payment allowed only after the owner approval(Confirmed bookings)"
             }, 400
-
+    
         # Prevent duplicate payment
-        if Payment.query.filter_by(booking_id=booking_id).first():
-            return {"error": "Payment already done for this booking"}, 409
+        existing_payment = Payment.query.filter_by(
+            booking_id=booking_id
+        ).first()
 
+        if existing_payment:
+            return{
+                "error":"Payment already done for this booking"
+            }, 409
+        
         # Amount validation
         amount = Decimal(str(booking.total_amount))
         if amount <= 0:

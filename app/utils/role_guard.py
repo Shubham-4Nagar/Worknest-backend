@@ -1,9 +1,8 @@
 from functools import wraps
-from flask_jwt_extended import get_jwt_identity,jwt_required
+from flask_jwt_extended import get_jwt_identity
 from flask import jsonify
 from app.models.users import User
 
-@jwt_required()
 def admin_required(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
@@ -16,7 +15,6 @@ def admin_required(fn):
         return fn(*args, **kwargs)
     return wrapper
 
-@jwt_required()
 def owner_required(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
