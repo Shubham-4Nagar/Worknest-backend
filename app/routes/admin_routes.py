@@ -34,7 +34,7 @@ def pending_owners_route():
 @jwt_required()
 @admin_required
 def all_users_route():
-    return get_all_users
+    return get_all_users()
 
 #Get all the bookings
 @admin_bp.route("/bookings", methods=["GET"])

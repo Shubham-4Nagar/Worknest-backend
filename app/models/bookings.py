@@ -54,6 +54,7 @@ class Booking(db.Model):
     status = db.Column(
         db.Enum(
             "pending",
+            "confirmed",
             "completed",
             "cancelled",
             name="booking_status_enum"

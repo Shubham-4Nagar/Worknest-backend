@@ -4,15 +4,15 @@ from app.models.spaces import Space
 ALLOWED_STATUSES = ["active", "inactive"]
 
 def get_pending_spaces_service():
-    spaces = Space.query.filter_by(approval_status="pending").all()
+    spaces = Space.query.filter_by(is_active=False).all()
 
     result = []
     for space in spaces:
         result.append({
-            "space_id": space.space_id,
+            "space_id": str(space.space_id),
             "space_name": space.space_name,
             "location": space.location,
-            "owner_id": space.owner_id,
+            "owner_id": str(space.owner_id),
             "status": space.approval_status
         })
 

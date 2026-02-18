@@ -1,5 +1,6 @@
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Column,Text,Boolean,ForeignKey,Integer
 from sqlalchemy.sql import func
 from app.extensions import db
 
@@ -19,10 +20,11 @@ class Space(db.Model):
         nullable=False
     )
 
-    space_name = db.Column(db.String(50), nullable=False)
-    location = db.Column(db.String(50), nullable=False)
-    max_capacity = db.Column(db.Integer, nullable=False)
+    space_name = db.Column(db.String(100), nullable=False)
+    location = db.Column(db.String(255), nullable=False)
+    description = db.Column(Text, nullable=True)
 
+    max_capacity = db.Column(db.Integer, nullable=False)
     image_url = db.Column(db.String(255))
 
     is_active = db.Column(

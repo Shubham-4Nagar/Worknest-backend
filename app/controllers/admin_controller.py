@@ -11,13 +11,6 @@ from app.services.admin_service import (
 
 @jwt_required()
 @admin_required
-def admin_dashboard():
-    return jsonify({
-        "message":"Welcome Admin",
-        "status":"Admin access granted"
-    }), 200 # OK
-
-@jwt_required()
 def verify_owner(owner_id):#Verify owner
     admin_id = get_jwt_identity()
     data = request.get_json()

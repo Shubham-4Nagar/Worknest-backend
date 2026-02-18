@@ -29,7 +29,7 @@ class OwnerVerification(db.Model):
             "pending",
             "approved",
             "rejected",
-            name="owner_status_enum"   # must match DB enum name
+            name="owner_status_enum"  
         ),
         nullable=False,
         default="pending"
