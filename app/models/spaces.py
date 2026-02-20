@@ -1,6 +1,6 @@
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy import Column,Text,Boolean,ForeignKey,Integer
+from sqlalchemy import Text
 from sqlalchemy.sql import func
 from app.extensions import db
 
@@ -32,7 +32,16 @@ class Space(db.Model):
         nullable=False,
         default=False
     )
-
+    space_type = db.Column(
+        db.Enum(
+            "private_cabin",
+            "hot_desk",
+            "meeting_room",
+            "event_space",
+            name = "space_type_enum"
+        ),
+        nullable = False
+    )
     created_at = db.Column(
         db.DateTime,
         server_default=func.now()

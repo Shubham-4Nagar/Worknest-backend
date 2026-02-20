@@ -5,6 +5,7 @@ from sqlalchemy import CheckConstraint
 from app.extensions import db
 
 
+
 class Booking(db.Model):
     __tablename__ = "bookings"
 

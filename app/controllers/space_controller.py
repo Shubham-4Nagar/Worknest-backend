@@ -71,7 +71,8 @@ def list_spaces_controller():
             "space_id": str(space.space_id),
             "space_name": space.space_name,
             "location": space.location,
-            "max_capacity": space.max_capacity
+            "max_capacity": space.max_capacity,
+            "space_type":space.space_type
         }
         for space in spaces
     ]), 200
@@ -86,7 +87,10 @@ def space_details_controller(space_id):
             "space_id": str(space.space_id),
             "space_name": space.space_name,
             "location": space.location,
-            "max_capacity": space.max_capacity
+            "max_capacity": space.max_capacity,
+            "space_type":space.space_type,
+            "description":space.description,
+            "image_url":space.image_url
         }), 200
 
     except ValueError as e:

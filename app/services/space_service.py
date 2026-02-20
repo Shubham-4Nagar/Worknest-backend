@@ -3,10 +3,21 @@ from app.models.spaces import Space
 from sqlalchemy.exc import IntegrityError
 
 
+VALID_SPACE_TYPES = [
+    "private_cabin",
+    "hot_desk",
+    "meeting_room",
+    "event_space"
+]
+
+
 # Create Space
 def create_space(owner_id, data):
 
-    required_fields = ["space_name", "location", "max_capacity"]
+    required_fields = ["space_name",
+                        "location",
+                        "max_capacity",
+                        "space_type"]
 
     for field in required_fields:
         if field not in data:
@@ -18,12 +29,18 @@ def create_space(owner_id, data):
             raise ValueError("max_capacity must be greater than 0")
     except (TypeError, ValueError):
         raise ValueError("max_capacity must be an integer")
+    
+    if data["space_type"] not in VALID_SPACE_TYPES:
+        raise ValueError("Invalid space_type")
 
     new_space = Space(
         owner_id=owner_id,
         space_name=data["space_name"],
         location=data["location"],
         max_capacity=max_capacity,
+        space_type=data["space_type"],
+        image_url = data.get("image_url"),
+        description=data.get("description"),
         is_active=False #admin approval first 
     )
 
@@ -85,6 +102,17 @@ def update_space(owner_id, space_id, data):
             space.max_capacity = max_capacity
         except (TypeError, ValueError):
             raise ValueError("max_capacity must be an integer")
+    
+    if "space_type" in data:
+        if data["space_type"] not in VALID_SPACE_TYPES:
+            raise ValueError("Invalid space_type")
+        space.space_type = data["space_type"]
+
+    if "description" in data:
+        space.description = data["description"]
+
+    if "image_url" in data:
+        space.image_url = data["image_url"]
 
     db.session.commit()
     return space

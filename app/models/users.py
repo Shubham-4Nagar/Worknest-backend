@@ -3,6 +3,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
 from app.extensions import db
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 
 
 
@@ -26,6 +27,9 @@ class User(db.Model):
         db.ForeignKey("roles.role_id"),
         nullable=False
     )
+
+    reset_token = db.Column(db.String(255), nullable=True)
+    reset_token_expiry = db.Column(db.DateTime, nullable=True)
 
     phone_number = db.Column(db.String(20))
     profile_image = db.Column(db.String(100))

@@ -230,3 +230,4 @@ def cancel_booking_service(user_id, booking_id):
             "error": "Internal server error",
             "details": str(e)
         }, 500
+
