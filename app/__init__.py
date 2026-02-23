@@ -2,6 +2,7 @@ from flask import Flask
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 from app.config import Config
+from flask_cors import CORS
 from app.extensions import db, bcrypt, jwt
 
 from app.routes.auth_routes import auth_bp
@@ -27,13 +28,14 @@ def create_app():
 
     app = Flask(__name__)
     app.config.from_object(Config)
+    CORS(app, origins=["http://localhost:4200"])
 
     # Initialize extensions
     db.init_app(app)
     bcrypt.init_app(app)
     jwt.init_app(app)
-    
     migrate.init_app(app, db)
+    
    #REGISTER BLUEPRINTS
     app.register_blueprint(auth_bp)
     app.register_blueprint(user_bp)
