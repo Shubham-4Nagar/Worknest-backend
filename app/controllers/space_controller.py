@@ -62,6 +62,8 @@ def delete_space_controller(space_id):
 
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
+    
+    
 #Public APIs
 def list_spaces_controller():
     spaces = get_active_spaces()
@@ -76,7 +78,6 @@ def list_spaces_controller():
         }
         for space in spaces
     ]), 200
-
 
 def space_details_controller(space_id):
 
