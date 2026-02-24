@@ -134,14 +134,18 @@ def get_owner_pending_bookings_service(owner_id):
     result = []
     for booking in bookings:
         result.append({
-            "booking_id": booking.booking_id,
-            "space_id": booking.space_id,
-            "user_id": booking.user_id,
-            "start_date": booking.start_date,
-            "end_date": booking.end_date,
-            "total_amount": float(booking.total_amount),
-            "status": booking.status
-        })
+    "booking_id": str(booking.booking_id),
+    "space_id": str(booking.space_id),
+    "space_name": booking.space.space_name,
+    "user_id": str(booking.user_id),
+    "user_name": f"{booking.user.first_name} {booking.user.last_name}", 
+    "booking_type": booking.booking_type.type_name,
+    "start_date": booking.start_date,
+    "end_date": booking.end_date,
+    "number_of_people": booking.number_of_people,
+    "total_amount": float(booking.total_amount),
+    "status": booking.status
+})
 
     return result, 200 #OK
 #Owner- Update the bookings status
