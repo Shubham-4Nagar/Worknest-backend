@@ -49,7 +49,7 @@ def register_user(data):
 
 
 # Owner verification
-def request_owner(user_id, data):
+def request_owner_service(user_id, data):
 
     if "id_proof" not in data:
         raise ValueError("ID proof required")

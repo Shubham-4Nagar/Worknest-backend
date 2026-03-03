@@ -3,7 +3,8 @@ from flask_jwt_extended import jwt_required
 from app.utils.role_guard import admin_required
 from app.services.admin_space_service import (
     get_pending_spaces_service,
-    update_space_approval_service
+    update_space_approval_service,
+    get_all_spaces_service
 )
 
 @jwt_required()
@@ -28,4 +29,10 @@ def update_space_approval(space_id):
         }), 400
     
     result, status = update_space_approval_service(space_id, status_value)
+    return jsonify(result), status
+
+@jwt_required()
+@admin_required
+def get_all_spaces_admin():
+    result, status = get_all_spaces_service()
     return jsonify(result), status

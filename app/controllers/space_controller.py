@@ -74,7 +74,8 @@ def list_spaces_controller():
             "space_name": space.space_name,
             "location": space.location,
             "max_capacity": space.max_capacity,
-            "space_type":space.space_type
+            "space_type":space.space_type,
+            "image_url": space.image_url
         }
         for space in spaces
     ]), 200
