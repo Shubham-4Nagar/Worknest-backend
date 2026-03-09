@@ -30,7 +30,7 @@ class Notification(db.Model):
     )
 
     is_read = db.Column(
-        db.boolean,
+        db.Boolean,
         nullable=False,
         default = False
     )
