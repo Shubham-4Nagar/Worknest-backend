@@ -192,12 +192,13 @@ def get_user_bookings_service(user_id):
     for booking in bookings:
         result.append({
             "booking_id": str(booking.booking_id),
-            "space_id": str(booking.space_id),
-            "status": booking.status,
-            "start_date": booking.start_date,
-            "end_date": booking.end_date,
+            "space_name":booking.space.space_name,
+            "booking_type":booking.booking_type.type_name,
+            "start_date":booking.start_date,
+            "end_date":booking.end_date,
+            "number_of_people": booking.number_of_people,
             "total_amount": float(booking.total_amount),
-            "created_at": booking.created_at
+            "status": booking.status
         })
 
     return {"bookings": result}, 200

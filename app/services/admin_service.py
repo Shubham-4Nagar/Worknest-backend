@@ -135,10 +135,14 @@ def get_all_bookings_service():
         result = []
 
         for booking in bookings:
+
+            user = User.query.get(booking.user_id)
+            space = Space.query.get(booking.space_id)
+
             result.append({
                 "booking_id": str(booking.booking_id),
-                "user_id": str(booking.user_id),
-                "space_id": str(booking.space_id),
+                "user_name": f"{user.first_name} {user.last_name}" if user else None,
+                "space_name": space.space_name if space else None,
                 "status": booking.status,
                 "total_amount": float(booking.total_amount),
                 "start_date": booking.start_date,
@@ -149,4 +153,3 @@ def get_all_bookings_service():
 
     except Exception:
         return {"error": "Internal server error"}, 500
-

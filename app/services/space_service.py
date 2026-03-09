@@ -58,9 +58,32 @@ def create_space(owner_id, data):
         raise RuntimeError("Internal server error")
 
 
-# Get all active spaces (public)
-def get_active_spaces():
-    return Space.query.filter_by(is_active=True).all()
+# Get all active spaces with optional filters (public)
+def get_active_spaces(filters=None):
+    query = Space.query.filter_by(is_active=True)
+
+    if filters:
+        # Filter by location (partial match, case-insensitive)
+        if filters.get("location"):
+            query = query.filter(
+                Space.location.ilike(f"%{filters['location']}%")
+            )
+
+        # Filter by space_type
+        if filters.get("space_type"):
+            query = query.filter(
+                Space.space_type == filters["space_type"]
+            )
+
+        # Filter by max_capacity (minimum seats needed)
+        if filters.get("min_capacity"):
+            try:
+                min_cap = int(filters["min_capacity"])
+                query = query.filter(Space.max_capacity >= min_cap)
+            except ValueError:
+                pass
+
+    return query.all()
 
 
 # Get single space details

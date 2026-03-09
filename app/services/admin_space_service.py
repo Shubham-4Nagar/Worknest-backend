@@ -60,7 +60,7 @@ def get_all_spaces_service():
                 "space_id": str(space.space_id),
                 "space_name": space.space_name,
                 "location": space.location,
-                "owner_id": str(space.owner_id),
+                "owner_name": f"{space.owner.first_name} {space.owner.last_name}",
                 "is_active": space.is_active,
                 "created_at": space.created_at
             })

@@ -29,6 +29,12 @@ class Notification(db.Model):
         nullable=False
     )
 
+    is_read = db.Column(
+        db.boolean,
+        nullable=False,
+        default = False
+    )
+
     created_at = db.Column(
         db.DateTime,
         server_default=func.now()

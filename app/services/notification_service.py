@@ -40,6 +40,33 @@ def get_user_notifications_service(user_id):
         })
 
     return result, 200 #OK
+
+#Mark a single notification as read
+def mark_notification_read_service(user_id, notification_id):
+    notification = Notification.query.filter_by(
+        notification_id=notification_id,
+        user_id=user_id
+    ).first()
+
+    if not notification:
+        return {"error": "Notification not found"}, 404
+
+    notification.is_read = True
+    db.session.commit()
+
+    return {"message": "Notification marked as read"}, 200
+
+
+# Mark ALL notifications as read for a user
+def mark_all_notifications_read_service(user_id):
+    Notification.query.filter_by(
+        user_id=user_id,
+        is_read=False
+    ).update({"is_read": True})
+
+    db.session.commit()
+
+    return {"message": "All notifications marked as read"}, 200
         
 
     

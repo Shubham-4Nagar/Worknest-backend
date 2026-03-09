@@ -21,6 +21,8 @@ def create_review_service(user_id, data):
                 }, 400
         if rating < 1 or rating > 5:
             return{"error":"RAting must be between 1 and 5"}, 400
+        
+        comment = data.get("comment","").strip() if data.get("commit") else None
 
         booking = Booking.query.filter_by(
             booking_id=booking_id,
@@ -41,7 +43,8 @@ def create_review_service(user_id, data):
             booking_id=booking_id,
             user_id=user_id,
             space_id=space_id,
-            rating=rating
+            rating=rating,
+            comment = comment
         )
 
         db.session.add(review)
@@ -49,7 +52,8 @@ def create_review_service(user_id, data):
 
         return {
             "message": "Review submitted successfully",
-            "rating": rating
+            "rating": rating,
+            "comment": comment
         }, 201
     except IntegrityError:
         db.session.rollback()

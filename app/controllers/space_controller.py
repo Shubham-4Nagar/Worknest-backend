@@ -66,7 +66,12 @@ def delete_space_controller(space_id):
     
 #Public APIs
 def list_spaces_controller():
-    spaces = get_active_spaces()
+    filters = {
+        "location": request.args.get("location"),
+        "space_type": request.args.get("space_type"),
+        "min_capacity": request.args.get("min_capacity")
+    }
+    spaces = get_active_spaces(filters)
 
     return jsonify([
         {

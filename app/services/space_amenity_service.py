@@ -19,8 +19,7 @@ def add_amenities_to_space(owner_id, space_id, data):
     # Check space ownership + active
     space = Space.query.filter_by(
         space_id=space_id,
-        owner_id=owner_id,
-        is_active=True
+        owner_id=owner_id
     ).first()
 
     if not space:

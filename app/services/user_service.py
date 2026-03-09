@@ -72,3 +72,41 @@ def request_owner_service(user_id, data):
     except Exception:
         db.session.rollback()
         raise RuntimeError("Internal server error")
+    
+# Update user profile
+def update_user_profile_service(user_id, data):
+    user = User.query.get(user_id)
+    if not user:
+        raise ValueError("User not found")
+
+    if "first_name" in data:
+        first_name = data["first_name"].strip()
+        if not first_name:
+            raise ValueError("first_name cannot be empty")
+        user.first_name = first_name
+
+    if "last_name" in data:
+        last_name = data["last_name"].strip()
+        if not last_name:
+            raise ValueError("last_name cannot be empty")
+        user.last_name = last_name
+
+    if "phone_number" in data:
+        user.phone_number = data["phone_number"].strip()
+
+    if "profile_image" in data:
+        user.profile_image = data["profile_image"].strip()
+
+    try:
+        db.session.commit()
+        return {
+            "message": "Profile updated successfully",
+            "user_id": str(user.user_id),
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "phone_number": user.phone_number,
+            "profile_image": user.profile_image
+        }
+    except Exception:
+        db.session.rollback()
+        raise RuntimeError("Internal server error")

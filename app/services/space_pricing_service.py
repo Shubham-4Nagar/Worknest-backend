@@ -35,8 +35,7 @@ def add_space_pricing(owner_id, space_id, data):
     # Ownership + space existence check
     space = Space.query.filter_by(
         space_id=space_id,
-        owner_id=owner_id,
-        is_active=True
+        owner_id=owner_id
     ).first()
 
     if not space:

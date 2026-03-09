@@ -7,7 +7,7 @@ def add_to_wishlist_service(user_id, space_id):
     try:
         space = Space.query.filter_by(
             space_id=space_id,
-            approval_status = "active"
+            is_active = True
         ).first()
 
         if not space:
@@ -43,12 +43,12 @@ def get_user_wishlist_service(user_id):
 
     for item in wishlist_items:
         result.append({
-            "wishlist_id": item.wishlist_id,
-            "space_id": item.space_id,
+            "wishlist_id": str(item.wishlist_id),
+            "space_id": str(item.space_id),
             "created_at": item.created_at.isoformat()
         })
 
-        return result, 200
+    return result, 200
     
 def remove_from_wishlist_service(user_id, space_id):
     wishlist = Wishlist.query.filter_by(

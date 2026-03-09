@@ -77,7 +77,7 @@ def reset_password_route():
     new_password = data.get("new_password")
 
     if not token or not new_password:
-        return jsonify({"error":"Token and new password required"})
+        return jsonify({"error":"Token and new password required"}), 400
     
     result = reset_password(token, new_password)
 
