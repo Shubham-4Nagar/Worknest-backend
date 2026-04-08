@@ -28,6 +28,7 @@ def create_app():
 
     app = Flask(__name__)
     app.config.from_object(Config)
+    Config.validate()
     CORS(app, origins=["http://localhost:4200"])
 
     # Initialize extensions
@@ -61,4 +62,3 @@ def create_app():
         return {"error":"Route not found"}, 404
 
     return app
-

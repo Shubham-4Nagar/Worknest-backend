@@ -18,11 +18,14 @@ def login():
     if not email or not password:
         return jsonify({"error": "Email and password required"}), 400
     try:
-        result = login_user(email, password)
+        result, status = login_user(email, password)
+        if status != 200:
+            return jsonify(result), status
+
         return jsonify({
             "message": "Login successful",
             **result
-        }), 200
+        }), status
 
     except ValueError as e:
         return jsonify({"error": str(e)}), 401
@@ -63,9 +66,8 @@ def forgot_password_route():
     if not email:
         return jsonify({"error":"Email required"}), 400
     
-    result = forgot_password(email)
-
-    return jsonify(result), 200
+    result, status = forgot_password(email)
+    return jsonify(result), status
 
 def reset_password_route():
     data = request.get_json()
@@ -79,12 +81,8 @@ def reset_password_route():
     if not token or not new_password:
         return jsonify({"error":"Token and new password required"}), 400
     
-    result = reset_password(token, new_password)
-
-    if isinstance(result, tuple):
-        return jsonify(result[0], result[1])
-    
-    return jsonify(result), 200
+    result, status = reset_password(token, new_password)
+    return jsonify(result), status
     
 
 @jwt_required()
@@ -92,4 +90,3 @@ def logout():
     return jsonify({
         "message": "Logged out successfully"
     }), 200
-

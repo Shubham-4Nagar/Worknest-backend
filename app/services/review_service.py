@@ -22,7 +22,7 @@ def create_review_service(user_id, data):
         if rating < 1 or rating > 5:
             return{"error":"RAting must be between 1 and 5"}, 400
         
-        comment = data.get("comment","").strip() if data.get("commit") else None
+        comment = data.get("comment", "").strip() if data.get("comment") else None
 
         booking = Booking.query.filter_by(
             booking_id=booking_id,
@@ -63,7 +63,7 @@ def create_review_service(user_id, data):
         return{
             "message":"Internal Server Error",
             "details": str(e)
-        }
+        }, 500
 
 
 def get_space_reviews_service(space_id):
