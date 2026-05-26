@@ -14,7 +14,7 @@ class Role(db.Model):
     )
 
     role_name = db.Column(
-        db.String(50),
+        db.String(200),
         unique=True,
         nullable=False
     )

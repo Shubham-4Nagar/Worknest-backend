@@ -32,7 +32,7 @@ class User(db.Model):
     reset_token_expiry = db.Column(db.DateTime, nullable=True)
 
     phone_number = db.Column(db.String(20))
-    profile_image = db.Column(db.String(100))
+    profile_image = db.Column(db.String(255))
 
     created_at = db.Column(
         db.DateTime,
