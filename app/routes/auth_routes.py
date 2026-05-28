@@ -12,6 +12,7 @@ def login_route():
     return login()
 
 @auth_bp.route("/me", methods=["GET"])
+@jwt_required()
 def me_route():
     return me()
 
